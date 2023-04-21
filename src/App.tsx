@@ -30,21 +30,29 @@ function App(): JSX.Element {
 
     const [filter, setFilter] = useState <FilterValuesType>('All')
 
-    let filteredTasks: TaskType[] = tasks
-    if (filter === 'Active') {
-        filteredTasks = tasks.filter(t=> t.taskIsDone)
-    }
-    if (filter === 'Completed') {
-        filteredTasks = tasks.filter(t=> !t.taskIsDone)
-    }
-
     const changeFilter = (filterValue: string) => {
         setFilter(filterValue)
     }
 
+    // let filteredTasks: TaskType[] = tasks
+    // if (filter === 'Active') {
+    //     filteredTasks = tasks.filter(t=> t.taskIsDone)
+    // }
+    // if (filter === 'Completed') {
+    //     filteredTasks = tasks.filter(t=> !t.taskIsDone)
+    // }
 
-
-
+    const getFilteredTasksForTodolist = (tasksList: TaskType[], filterValue: FilterValuesType) => {
+        switch (filterValue) {
+            case 'Active':
+                return tasksList.filter(t=> t.taskIsDone)
+            case 'Completed':
+                return tasksList.filter(t=> !t.taskIsDone)
+            default:
+                return tasksList
+        }
+    }
+    const filteredTasks = getFilteredTasksForTodolist(tasks, filter)
 
     return (
         <div className="App">
