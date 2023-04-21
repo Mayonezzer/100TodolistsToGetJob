@@ -6,3 +6,35 @@
 .App > div {
   margin-right: 50px;
 }
+
+.todolist {
+  border: 2px solid hotpink;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: cornflowerblue;
+}
+
+.todolist-empty {
+  border: 2px solid hotpink;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: chocolate;
+}
+
+.error {
+  border: red 1px solid;
+}
+
+.errorMessage {
+  color: red;
+}
+
+
+.activeFilter {
+  background-color: aquamarine;
+}
+
+
+.isDone {
+  opacity: 0.5;
+}
