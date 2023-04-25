@@ -29,7 +29,6 @@ function App(): JSX.Element {
     }
 
     const [filter, setFilter] = useState <FilterValuesType>('All')
-
     const changeFilter = (filterValue: string) => {
         setFilter(filterValue)
     }

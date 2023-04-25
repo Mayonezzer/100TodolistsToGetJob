@@ -4,6 +4,7 @@ import {SuperInput} from "./SuperInput";
 import {MegaButton} from "./MegaButton";
 import {FilterValuesType} from "../App";
 
+
 export type PropsType = {
     title: string
     tasks: TaskType[]
@@ -67,7 +68,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
     //     props.changeFilter('Completed')
     // }
 
-    const changeFilter = (filterValue: FilterValuesType) => {
+    const bigChangeFilter = (filterValue: FilterValuesType) => {
         props.changeFilter(filterValue)
     }
 
@@ -92,9 +93,9 @@ export const Todolist: React.FC<PropsType> = (props) => {
                 removeTask={props.removeTask}
                 changeTaskCheckbox={props.changeTaskCheckbox}
             />
-            <MegaButton name={"All"} filter={props.filter} callBack={() => changeFilter('All')}/>
-            <MegaButton name={"Active"} filter={props.filter} callBack={() => changeFilter('Active')}/>
-            <MegaButton name={"Completed"} filter={props.filter} callBack={() => changeFilter('Completed')}/>
+            <MegaButton name={"All"} filter={props.filter} callBack={() => bigChangeFilter('All')}/>
+            <MegaButton name={"Active"} filter={props.filter} callBack={() => bigChangeFilter('Active')}/>
+            <MegaButton name={"Completed"} filter={props.filter} callBack={() => bigChangeFilter('Completed')}/>
         </div>
     )
 }

@@ -5,7 +5,7 @@ import {FilterValuesType} from "../App";
 type PropsType = {
     name: string
     callBack: () => void
-    filter: FilterValuesType
+    filter?: FilterValuesType
 }
 
 export const MegaButton: React.FC<PropsType> = (props) => {
