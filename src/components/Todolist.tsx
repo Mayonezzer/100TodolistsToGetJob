@@ -6,13 +6,15 @@ import {FilterValuesType} from "../App";
 
 
 export type PropsType = {
+    tlId: string
     title: string
     tasks: TaskType[]
-    removeTask: (taskID: string) => void
-    addTask: (inputTitle: string) => void
-    changeFilter: (filterValue: string) => void
-    changeTaskCheckbox: (taskID: string, newIsDone: boolean) => void
+    removeTask: (todolistId: string, taskID: string) => void
+    addTask: (todolistId: string, inputTitle: string) => void
+    changeTodolistFilter: (todolistId: string, filterValue: string) => void
+    changeTaskCheckbox: (todolistId: string, taskID: string, newIsDone: boolean) => void
     filter: FilterValuesType
+    removeTodolist: (todolistId: string) => void
 
 }
 
@@ -44,7 +46,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
     const addTaskHandler = () => {
         if (inputTitle.trim() !== '') {
-            props.addTask(inputTitle.trim())
+            props.addTask(props.tlId, inputTitle.trim())
             setInputTitle('')
         } else {
             setError('напиши че-нить')
@@ -69,13 +71,19 @@ export const Todolist: React.FC<PropsType> = (props) => {
     // }
 
     const bigChangeFilter = (filterValue: FilterValuesType) => {
-        props.changeFilter(filterValue)
+        props.changeTodolistFilter(props.tlId, filterValue)
+    }
+
+    const removeTodolistHandler = () => {
+        props.removeTodolist(props.tlId)
     }
 
 
     return (
         <div className={todoClasses}>
-            <h3>{props.title}</h3>
+            <h3>{props.title}
+                <button onClick={removeTodolistHandler}>X</button>
+            </h3>
             <div>
                 <SuperInput value={inputTitle}
                             placeholder={'введи inputTitle, плез'}
@@ -89,6 +97,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
                 {error && <div>{error}</div>}
             </div>
             <MappedTasks
+                tlId={props.tlId}
                 tasks={props.tasks}
                 removeTask={props.removeTask}
                 changeTaskCheckbox={props.changeTaskCheckbox}

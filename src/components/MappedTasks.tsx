@@ -2,9 +2,10 @@ import React, {ChangeEvent} from 'react';
 import {TaskType} from "./Todolist";
 
 type PropsType = {
+    tlId: string
     tasks: TaskType[]
-    removeTask: (taskID: string) => void
-    changeTaskCheckbox: (taskID: string, newIsDone: boolean)=> void
+    removeTask: (todolistId: string, taskID: string) => void
+    changeTaskCheckbox: (todolistId: string, taskID: string, newIsDone: boolean)=> void
 }
 
 export const MappedTasks: React.FC<PropsType> = (props) => {
@@ -12,10 +13,10 @@ export const MappedTasks: React.FC<PropsType> = (props) => {
     const mappedTasks = props.tasks.map((t) => {
 
         const removeTaskHandler = () => {
-            props.removeTask(t.taskId)
+            props.removeTask(props.tlId, t.taskId)
         }
         const changeTaskCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
-            props.changeTaskCheckbox(t.taskId, event.currentTarget.checked)
+            props.changeTaskCheckbox(props.tlId, t.taskId, event.currentTarget.checked)
         }
 
         return (
