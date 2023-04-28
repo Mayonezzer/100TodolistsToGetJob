@@ -82,22 +82,24 @@ function App(): JSX.Element {
 
     //const filteredTasks = getFilteredTasksForTodolist(tasks, filter)
 
-    const mappedTodolist = todolists.map( (tl) => {
-        const filteredTasks = getFilteredTasksForTodolist(tasks[tl.todoId], tl.todolistFilter)
-        return (
-            <Todolist
-                tlId={tl.todoId}
-                title={tl.todolistTitle}
-                tasks={filteredTasks}
-                removeTask={removeTask}
-                changeTodolistFilter={changeTodolistFilter}
-                addTask={addTask}
-                changeTaskCheckbox={changeTaskCheckbox}
-                filter={tl.todolistFilter}
-                removeTodolist={removeTodolist}
-            />
-        )
-    })
+    const mappedTodolist = todolists.length
+        ? todolists.map((tl) => {
+            const filteredTasks = getFilteredTasksForTodolist(tasks[tl.todoId], tl.todolistFilter)
+            return (
+                <Todolist
+                    tlId={tl.todoId}
+                    title={tl.todolistTitle}
+                    tasks={filteredTasks}
+                    removeTask={removeTask}
+                    changeTodolistFilter={changeTodolistFilter}
+                    addTask={addTask}
+                    changeTaskCheckbox={changeTaskCheckbox}
+                    filter={tl.todolistFilter}
+                    removeTodolist={removeTodolist}
+                />
+            )
+        })
+        : <span> create a list pls </span>
 
     return (
         <div className="App">

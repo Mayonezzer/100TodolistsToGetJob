@@ -10,27 +10,29 @@ type PropsType = {
 
 export const MappedTasks: React.FC<PropsType> = (props) => {
 
-    const mappedTasks = props.tasks.map((t) => {
+    const mappedTasks = props.tasks.length
+        ? props.tasks.map((t) => {
 
-        const removeTaskHandler = () => {
-            props.removeTask(props.tlId, t.taskId)
-        }
-        const changeTaskCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
-            props.changeTaskCheckbox(props.tlId, t.taskId, event.currentTarget.checked)
-        }
+            const removeTaskHandler = () => {
+                props.removeTask(props.tlId, t.taskId)
+            }
+            const changeTaskCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
+                props.changeTaskCheckbox(props.tlId, t.taskId, event.currentTarget.checked)
+            }
 
-        return (
-            <div>
-                <li key={t.taskId}>
-                    <button onClick={removeTaskHandler}>x</button>
-                    <input type="checkbox"
-                           checked={t.taskIsDone}
-                           onChange={changeTaskCheckboxHandler}
-                    />
-                    <span>{t.taskTitle}</span></li>
-            </div>
-        )
-    })
+            return (
+                <div>
+                    <li key={t.taskId}>
+                        <button onClick={removeTaskHandler}>x</button>
+                        <input type="checkbox"
+                               checked={t.taskIsDone}
+                               onChange={changeTaskCheckboxHandler}
+                        />
+                        <span>{t.taskTitle}</span></li>
+                </div>
+            )
+        })
+        : <span> create a task pls </span>
 
     return (
         <>
