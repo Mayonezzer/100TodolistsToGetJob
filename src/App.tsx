@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from "./components/Todolist";
 import {v1} from "uuid";
+import {AddItemForm} from "./components/AddItemForm";
+
 
 export type FilterValuesType = string
 
@@ -9,7 +11,6 @@ type TodolistType = {
     todoId: string
     todolistTitle: string
     todolistFilter: FilterValuesType
-    // tasks: Array<TaskType>
 }
 
 type TaskStateType = {
@@ -43,22 +44,40 @@ function App(): JSX.Element {
         setTodolists(todolists.filter(t=>t.todoId!==todolistId))
         delete tasks[todolistId]
     }
-
     const removeTask = (todolistId: string, taskID: string) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].filter(t=> t.taskId!==taskID)})
     }
-
     const addTask = (todolistId: string, inputTitle: string) => {
-        const newTask = { taskId: v1(), taskTitle: inputTitle, taskIsDone: true }
-        setTasks({...tasks, [todolistId]: [...tasks[todolistId], newTask]})
+        const newTask = { taskId: v1(), taskTitle: inputTitle, taskIsDone: false }
+        setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
     }
-
+    const addEditTask = (todolistId: string, taskID: string, editInputTaskTitle: string) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(el=>el.taskId===taskID ? {...el, taskTitle: editInputTaskTitle}:el)})
+    }
+    const addEditTodolistTitle = (todolistId: string, editInputTitle: string) => {
+        setTodolists(todolists.map(el=>el.todoId===todolistId?{...el, todolistTitle:editInputTitle}:el))
+    }
     const changeTaskCheckbox = (todolistId: string, taskID: string, newIsDone: boolean) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].map(t=> t.taskId===taskID?{...t, taskIsDone:newIsDone}:t)})
     }
-
     const changeTodolistFilter = (todolistId: string, filterValue: string) => {
         setTodolists(todolists.map(el=> el.todoId===todolistId?{...el, todolistFilter:filterValue}:el))
+    }
+    const addNewTodolist = (newTodoName: string) => {
+        const newTodoId: string = v1()
+        const newTodolist: TodolistType = { todoId:newTodoId, todolistTitle: newTodoName, todolistFilter: 'all' }
+        setTodolists([newTodolist, ...todolists])
+        setTasks({[newTodoId]: [], ...tasks})
+    }
+    const getFilteredTasksForTodolist = (tasksList: TaskType[], filterValue: FilterValuesType) => {
+        switch (filterValue) {
+            case 'Active':
+                return tasksList.filter(t=> !t.taskIsDone)
+            case 'Completed':
+                return tasksList.filter(t=> t.taskIsDone)
+            default:
+                return tasksList
+        }
     }
 
     // let filteredTasks: TaskType[] = tasks
@@ -68,18 +87,6 @@ function App(): JSX.Element {
     // if (filter === 'Completed') {
     //     filteredTasks = tasks.filter(t=> !t.taskIsDone)
     // }
-
-    const getFilteredTasksForTodolist = (tasksList: TaskType[], filterValue: FilterValuesType) => {
-        switch (filterValue) {
-            case 'Active':
-                return tasksList.filter(t=> t.taskIsDone)
-            case 'Completed':
-                return tasksList.filter(t=> !t.taskIsDone)
-            default:
-                return tasksList
-        }
-    }
-
     //const filteredTasks = getFilteredTasksForTodolist(tasks, filter)
 
     const mappedTodolist = todolists.length
@@ -87,6 +94,7 @@ function App(): JSX.Element {
             const filteredTasks = getFilteredTasksForTodolist(tasks[tl.todoId], tl.todolistFilter)
             return (
                 <Todolist
+                    key={tl.todoId}
                     tlId={tl.todoId}
                     title={tl.todolistTitle}
                     tasks={filteredTasks}
@@ -96,6 +104,8 @@ function App(): JSX.Element {
                     changeTaskCheckbox={changeTaskCheckbox}
                     filter={tl.todolistFilter}
                     removeTodolist={removeTodolist}
+                    addEditTask={addEditTask}
+                    addEditTodolistTitle={addEditTodolistTitle}
                 />
             )
         })
@@ -103,6 +113,9 @@ function App(): JSX.Element {
 
     return (
         <div className="App">
+            <div>
+                <AddItemForm callBack={addNewTodolist}/>
+            </div>
             {mappedTodolist}
         </div>
     );

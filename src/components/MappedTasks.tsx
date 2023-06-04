@@ -1,11 +1,15 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {TaskType} from "./Todolist";
+import {SuperCheckbox} from "./SuperCheckbox";
+import {EditableSpan} from "./EditableSpan";
+import {SuperButton} from "./SuperButton";
 
 type PropsType = {
     tlId: string
     tasks: TaskType[]
     removeTask: (todolistId: string, taskID: string) => void
     changeTaskCheckbox: (todolistId: string, taskID: string, newIsDone: boolean)=> void
+    addEditTask: (todolistId: string, taskID: string, editInputTaskTitle: string) => void
 }
 
 export const MappedTasks: React.FC<PropsType> = (props) => {
@@ -16,30 +20,30 @@ export const MappedTasks: React.FC<PropsType> = (props) => {
             const removeTaskHandler = () => {
                 props.removeTask(props.tlId, t.taskId)
             }
-            const changeTaskCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                props.changeTaskCheckbox(props.tlId, t.taskId, event.currentTarget.checked)
+            const changeTaskCheckboxHandler = (eCurrentTargetChecked: boolean) => {
+                props.changeTaskCheckbox(props.tlId, t.taskId, eCurrentTargetChecked)
+            }
+            // добавляем таску из едитбл спана при блюре
+            const addEditTaskHandler = (editInputTitle: string) => {
+                props.addEditTask(props.tlId,t.taskId, editInputTitle)
             }
 
             return (
-                <div>
                     <li key={t.taskId}>
-                        <button onClick={removeTaskHandler}>x</button>
-                        <input type="checkbox"
-                               checked={t.taskIsDone}
-                               onChange={changeTaskCheckboxHandler}
+                        <SuperButton name={'x'} callBack={removeTaskHandler}/>
+                        <SuperCheckbox checked={t.taskIsDone} onChangeCallBack={changeTaskCheckboxHandler} />
+                        <EditableSpan oldTitle={t.taskTitle}
+                                      callBack={addEditTaskHandler}
                         />
-                        <span>{t.taskTitle}</span></li>
-                </div>
+                    </li>
             )
         })
         : <span> create a task pls </span>
 
     return (
-        <>
             <ul>
                 {mappedTasks}
             </ul>
-        </>
     );
 };
 
